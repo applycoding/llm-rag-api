@@ -1,0 +1,32 @@
+# Demo stack: the API plus a Chroma server.
+# The default LLM is the offline extractive provider, so this starts without API keys.
+# Wipe the chroma-data volume if you change embedding provider or vector dimensions.
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      RAG_LLM_PROVIDER: fake
+      RAG_EMBEDDING_PROVIDER: local
+      RAG_CHROMA_HOST: chroma
+      RAG_CHROMA_PORT: "8000"
+      ANONYMIZED_TELEMETRY: "False"
+    depends_on:
+      chroma:
+        condition: service_started
+
+  chroma:
+    image: chromadb/chroma:0.6.3
+    ports:
+      - "8001:8000"
+    environment:
+      ANONYMIZED_TELEMETRY: "False"
+      IS_PERSISTENT: "TRUE"
+      PERSIST_DIRECTORY: /chroma/chroma
+    volumes:
+      - chroma-data:/chroma/chroma
+
+volumes:
+  chroma-data:
