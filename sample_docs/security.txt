@@ -1,0 +1,7 @@
+Lumen Archive security notes
+
+Lumen Archive retains audit logs for 180 days.
+Deleted objects stay in the recycle bin for 14 days.
+Encryption at rest uses AES-256.
+The Beacon and Flare plans include SSO.
+Customer-managed keys are available only on the Flare plan.

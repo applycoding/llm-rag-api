@@ -1,0 +1,25 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      RAG_LLM_PROVIDER: fake
+      RAG_AUTO_INGEST: "true"
+    volumes:
+      - rag-data:/app/data
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')",
+        ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 15s
+
+volumes:
+  rag-data:
